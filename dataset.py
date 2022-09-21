@@ -5,6 +5,8 @@ import six
 import math
 import lmdb
 import torch
+# Modify
+from os.path import join as opj
 
 from natsort import natsorted
 from PIL import Image
@@ -22,7 +24,7 @@ class Batch_Balanced_Dataset(object):
         For example, when select_data is "MJ-ST" and batch_ratio is "0.5-0.5",
         the 50% of the batch is filled with MJ and the other 50% of the batch is filled with ST.
         """
-        log = open(f'./saved_models/{opt.exp_name}/log_dataset.txt', 'a')
+        log = open(opj(opt.save_dir, f'saved_models/{opt.exp_name}/log_dataset.txt'), 'a')
         dashed_line = '-' * 80
         print(dashed_line)
         log.write(dashed_line + '\n')
@@ -149,7 +151,6 @@ class LmdbDataset(Dataset):
                 If you want to evaluate IC15-2077 & CUTE datasets which have special character labels,
                 use --data_filtering_off and only evaluate on alphabets and digits.
                 see https://github.com/clovaai/deep-text-recognition-benchmark/blob/6593928855fb7abb999a99f428b3e4477d4ae356/dataset.py#L190-L192
-
                 And if you want to evaluate them with the model trained with --sensitive option,
                 use --sensitive and --data_filtering_off,
                 see https://github.com/clovaai/deep-text-recognition-benchmark/blob/dff844874dbe9e0ec8c5a52a7bd08c7f20afe704/test.py#L137-L144
