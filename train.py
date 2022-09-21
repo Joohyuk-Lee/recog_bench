@@ -119,7 +119,7 @@ def train(opt):
         optimizer = optim.Adadelta(filtered_parameters, lr=opt.lr, rho=opt.rho, eps=opt.eps)
     
     
-    if opt.scehduler == 'CosineAnnealingLR':
+    if opt.scheduler == 'CosineAnnealingLR':
         scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer,T_max=opt.T_max, eta_min=opt.min_lr)
     elif opt.scheduler == 'CosineAnnealingWarmRestarts':
         scheduler = optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer,T_0=opt.T_0, eta_min=opt.min_lr)
@@ -312,7 +312,7 @@ if __name__ == '__main__':
     parser.add_argument("--is_kaggle", default=False, help="for package dependency")
     opt = parser.parse_args()
 
-    if not hasattr(opt, batch_size):
+    if not hasattr(opt, "batch_size"):
         opt.batch_size = opt.tr_batch_size
         
     if not opt.exp_name:
