@@ -36,7 +36,7 @@ def train(opt):
     AlignCollate_valid = AlignCollate(imgH=opt.imgH, imgW=opt.imgW, keep_ratio_with_pad=opt.PAD)
     valid_dataset, valid_dataset_log = hierarchical_dataset(root=opt.valid_data, opt=opt)
     valid_loader = torch.utils.data.DataLoader(
-        valid_dataset, batch_size=opt.batch_size,
+        valid_dataset, batch_size=opt.val_batch_size,
         shuffle=True,  # 'True' to check training progress with validation function.
         num_workers=int(opt.workers),
         collate_fn=AlignCollate_valid, pin_memory=True)
@@ -312,6 +312,9 @@ if __name__ == '__main__':
     parser.add_argument("--is_kaggle", default=False, help="for package dependency")
     opt = parser.parse_args()
 
+    if not hasattr(opt, batch_size):
+        opt.batch_size = opt.tr_batch_size
+        
     if not opt.exp_name:
         opt.exp_name = f'{opt.Transformation}-{opt.FeatureExtraction}-{opt.SequenceModeling}-{opt.Prediction}'
         opt.exp_name += f'-Seed{opt.manualSeed}'
