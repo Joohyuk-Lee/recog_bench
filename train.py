@@ -1,5 +1,3 @@
-%%writefile /content/deep-text-recognition-benchmark/train.py
-
 import os
 import sys
 import time
