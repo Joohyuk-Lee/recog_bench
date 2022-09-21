@@ -206,12 +206,12 @@ def train(opt):
                 # keep best accuracy model (on valid dataset)
                 if current_accuracy > best_accuracy:
                     best_accuracy = current_accuracy
-                    torch.save(model.state_dict(), opj(opt.save_dir, f'saved_models/{opt.exp_name}/best_accuracy.pth'))
+                    torch.save(model.state_dict(), opj(opt.save_dir, f'saved_models/{opt.exp_name}/{best_accuracy:0.4f}_best_accuracy.pth'))
                 if current_norm_ED > best_norm_ED:
                     best_norm_ED = current_norm_ED
-                    torch.save(model.state_dict(), opj(opt.save_dir, f'saved_models/{opt.exp_name}/best_norm_ED.pth'))
+                    torch.save(model.state_dict(), opj(opt.save_dir, f'saved_models/{opt.exp_name}/{best_norm_ED:0.4f}_best_norm_ED.pth'))
                 best_model_log = f'{"Best_accuracy":17s}: {best_accuracy:0.3f}, {"Best_norm_ED":17s}: {best_norm_ED:0.2f}'
-
+                
                 loss_model_log = f'{loss_log}\n{current_model_log}\n{best_model_log}'
                 print(loss_model_log)
                 log.write(loss_model_log + '\n')
