@@ -207,7 +207,11 @@ def train(opt):
                 # keep best accuracy model (on valid dataset)
                 if current_accuracy > best_accuracy:
                     best_accuracy = current_accuracy
-                    torch.save(model.state_dict(), opj(opt.save_dir, f'saved_models/{opt.exp_name}/{best_accuracy:0.4f}_best_accuracy.pth'))
+                    if current_accuracy > 0.5:
+                        torch.save(model.state_dict(), opj(opt.save_dir, f'saved_models/{opt.exp_name}/{best_accuracy:0.4f}_best_accuracy.pth'))
+                    else:
+                        print("Not save, it is not larger than 0.5")
+                        
                     print(f"patient_step reset from : {patient_step} into : 0")
                     patient_step=0
                 else:
@@ -369,6 +373,7 @@ if __name__ == '__main__':
         opt.num_iter = int(opt.num_iter / opt.num_gpu)
         """
 
-    if opt.is_kaggle:
-        os.system('pip install natsort')
+    # if opt.is_kaggle:
+    #     os.system('pip install natsort')
+
     train(opt)
