@@ -128,7 +128,8 @@ def train(opt):
 
     print("Optimizer:")
     print(optimizer)
-
+    
+    patient_step = 0
     """ final options """
     # print(opt)
     with open(opj(opt.save_dir, f'saved_models/{opt.exp_name}/opt.txt'), 'a') as opt_file:
@@ -207,9 +208,15 @@ def train(opt):
                 if current_accuracy > best_accuracy:
                     best_accuracy = current_accuracy
                     torch.save(model.state_dict(), opj(opt.save_dir, f'saved_models/{opt.exp_name}/{best_accuracy:0.4f}_best_accuracy.pth'))
+                    print(f"patient_step reset from : {patient_step} into : 0")
+                    patient_step=0
+                else:
+                    patient_step+=1
+
                 if current_norm_ED > best_norm_ED:
                     best_norm_ED = current_norm_ED
-                    torch.save(model.state_dict(), opj(opt.save_dir, f'saved_models/{opt.exp_name}/{best_norm_ED:0.4f}_best_norm_ED.pth'))
+                    print("best_norm_ED updated! but, Not Save")
+                    #torch.save(model.state_dict(), opj(opt.save_dir, f'saved_models/{opt.exp_name}/{best_norm_ED:0.4f}_best_norm_ED.pth'))
                 best_model_log = f'{"Best_accuracy":17s}: {best_accuracy:0.3f}, {"Best_norm_ED":17s}: {best_norm_ED:0.2f}'
                 
                 loss_model_log = f'{loss_log}\n{current_model_log}\n{best_model_log}'
@@ -229,6 +236,11 @@ def train(opt):
                 predicted_result_log += f'{dashed_line}'
                 print(predicted_result_log)
                 log.write(predicted_result_log + '\n')
+
+        if patient_step > opt.patient:
+            print("early stopping...!")
+            print('end the training')
+            sys.exit()
 
         # save model per 1e+5 iter.
         if (iteration + 1) % 1e+5 == 0:
@@ -251,6 +263,7 @@ if __name__ == '__main__':
     parser.add_argument('--workers', type=int, help='number of data loading workers', default=4) 
     parser.add_argument('--tr_batch_size', type=int, default=32, help='train mode, input batch size')
     parser.add_argument('--val_batch_size', type=int, default=64, help="valid mode, input batch size")
+    parser.add_argument('--patient', type=int, default=50, help="for early stop, number of patient steps")
 
     parser.add_argument('--num_iter', type=int, default=300000, help='number of iterations to train for')
     parser.add_argument('--valInterval', type=int, default=2000, help='Interval between each validation')
