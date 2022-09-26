@@ -208,7 +208,8 @@ def train(opt):
                 if current_accuracy > best_accuracy:
                     best_accuracy = current_accuracy
                     if current_accuracy > 0.5:
-                        torch.save(model.state_dict(), opj(opt.save_dir, f'saved_models/{opt.exp_name}/{best_accuracy:0.4f}_best_accuracy.pth'))
+                        #torch.save(model.state_dict(), opj(opt.save_dir, f'saved_models/{opt.exp_name}/{best_accuracy:0.4f}_best_accuracy.pth'))
+                        torch.save(model.state_dict(), opj(opt.save_dir, f'saved_models/{opt.exp_name}/best_accuracy.pth'))
                     else:
                         print("Not save, it is not larger than 0.5")
                         
